@@ -1,0 +1,13 @@
+[run]
+source =
+    freetx
+    tests/
+branch = True
+omit =
+    freetx/cli.py
+    freetx/keygen.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:

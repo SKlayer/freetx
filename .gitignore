@@ -1,0 +1,14 @@
+*.log
+*.pyc
+*.orig
+__pycache__
+/.cache
+/.idea
+/.coverage
+/.pytest_cache
+/freetx.egg-info
+/build
+/dist
+/docs/build
+/wheelhouse
+venv/
