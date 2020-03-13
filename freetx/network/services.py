@@ -1,7 +1,5 @@
 import logging
-
 import requests
-from cashaddress import convert as cashaddress
 from decimal import Decimal
 
 from freetx.network import currency_to_satoshi
@@ -274,14 +272,14 @@ class IFBlockAPI():
     @classmethod
     def broadcast_tx(cls, tx_hex):  # pragma: no cover
         r = requests.post(cls.MAIN_TX_PUSH_API, data={"raw_tx": tx_hex})
-        print(r.json(),tx_hex)
-        return True if "txid" in r.json()["data"] else False
+        #print(r.json(),tx_hex)
+        return True if "OK" == r.json()["message"] else False
 
     @classmethod
     def broadcast_tx_testnet(cls, tx_hex):  # pragma: no cover
 
         r = requests.post(cls.TEST_TX_PUSH_API,data={"raw_tx": tx_hex})
-        return True if "txid" in r.json()["data"] else False
+        return True if "OK" == r.json()["message"] else False
 
 
 class NetworkAPI:

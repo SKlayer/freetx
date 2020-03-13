@@ -1,11 +1,10 @@
-from freetx import cashaddr
 from freecrypto import verify_signature as _vs
 
 from freetx.base58 import b58decode_check, b58encode_check
 from freetx.crypto import ripemd160_sha256
 from freetx.curve import x_to_y
 
-MAIN_PUBKEY_HASH = b'\x00'
+MAIN_PUBKEY_HASH = b'\x23'
 MAIN_SCRIPT_HASH = b'\x05'
 MAIN_PRIVATE_KEY = b'\x80'
 MAIN_BIP32_PUBKEY = b'\x04\x88\xb2\x1e'
@@ -36,20 +35,20 @@ def verify_sig(signature, data, public_key):
 
 
 def address_to_public_key_hash(address):
-    Address = cashaddr.Address.from_string(address)
-    return bytes(Address.payload)
+    get_version(address)
+    return b58decode_check(address)[1:]
 
 
 def get_version(address):
-    address = cashaddress.Address._cash_string(address)
+    prefix = b58decode_check(address)[:1]
 
-    if address.version == 'P2PKH':
+    if prefix == MAIN_PUBKEY_HASH:
         return 'main'
-    elif address.version == 'P2PKH-TESTNET':
+    elif prefix == TEST_PUBKEY_HASH:
         return 'test'
     else:
         raise ValueError('{} does not correspond to a mainnet nor '
-                         'testnet P2PKH address.'.format(address.version))
+                         'testnet address.'.format(prefix))
 
 
 def bytes_to_wif(private_key, prefix='main', compressed=False):
@@ -104,12 +103,11 @@ def wif_checksum_check(wif):
 
     return False
 
-
 def public_key_to_address(public_key, prefix='main'):
     if prefix == 'test':
-        prefix = 'P2PKH-TESTNET'
+        prefix = TEST_PUBKEY_HASH
     elif prefix == 'main':
-        prefix = 'P2PKH'
+        prefix = MAIN_PUBKEY_HASH
     else:
         raise ValueError('Invalid prefix.')
 
@@ -118,10 +116,7 @@ def public_key_to_address(public_key, prefix='main'):
     if length not in (33, 65):
         raise ValueError('{} is an invalid length for a public key.'.format(length))
 
-    payload = list(ripemd160_sha256(public_key))
-    address = cashaddress.Address(payload=payload, version=prefix)
-    return address.cash_address()
-
+    return b58encode_check(prefix + ripemd160_sha256(public_key))
 
 def public_key_to_coords(public_key):
 
