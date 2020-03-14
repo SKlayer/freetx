@@ -72,7 +72,7 @@ and Windows and supports Python 3.5+ and PyPy3.5-v5.7.1+. `pip` >= 8.1.2 is requ
 
 
 ```shell
-$ python setup.pp install  
+$ python setup.py install  
 ```
 
 ## Documentation
