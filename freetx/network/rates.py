@@ -7,7 +7,7 @@ import requests
 
 from freetx.utils import Decimal
 
-DEFAULT_CACHE_TIME = 60
+DEFAULT_CACHE_TIME = 300
 
 # Constant for use in deriving exchange
 # rates when given in terms of 1 BCH.
